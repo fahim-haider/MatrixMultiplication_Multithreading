@@ -19,6 +19,9 @@ int matrix2[MATRIXLENGTH][MATRIXLENGTH];
 long dotProduct = 0;
 const int THREADCOUNT = 4;
 
+// Semaphore variable!
+HANDLE productLock;
+
 // Create a random number generator with an upper and lower bound! (inclusive)
 int randomNumberGenerator(int lower_bound, int upper_bound) {
     random_device rd;
@@ -39,19 +42,20 @@ void fillMatrices(int threadID) {
     }
 }
 
-int calculateProduct() {
-    // For every row of m1, multiple its constituents with the corresponding column of m2
+// Calculate dot product of the two matrices matrix1 and matrix2
+int calculateProduct(int threadID) {
     // Loop through rows
-    for(int i = 0; i < MATRIXLENGTH; i++) {
-        // Loop through elements of row
-        for(int j = 0; j < MATRIXLENGTH; j++) {
+    for(int i = 0; i < MATRIXLENGTH; i += THREADCOUNT) {
+        // Loop through elements of row and multipy with its corresponding column
+        for(int j = 0; j < MATRIXLENGTH; j += THREADCOUNT) {
+            WaitForSingleObject(productLock, INFINITE);
             dotProduct += matrix1[i][j] * matrix2[j][i];
+            ReleaseSemaphore(productLock, 1, nullptr);
         }
     }
     return 0;
 }
 
-HANDLE productLock;
 int main (int argc, char* argv[]) {
     //Creates output file
     ofstream outFile("Results.txt");
@@ -73,19 +77,28 @@ int main (int argc, char* argv[]) {
     for(auto& th: threads) {
         th.join();
     }
-
     auto endFill = chrono::high_resolution_clock::now();
 
     chrono::duration<double> durationFill = endFill - startFill;
 
     auto startCalc = chrono::high_resolution_clock::now();
-    calculateProduct();
+    for(int i = 0; i < THREADCOUNT; i ++) {
+        threads[i] = thread(calculateProduct, i);
+    }
+
+    for(auto& th: threads) {
+        th.join();
+    }
     auto endCalc = chrono::high_resolution_clock::now();
 
     chrono::duration<double> durationCalc = endCalc - startCalc;
 
-    outFile << "Matrix size:                        " << MATRIXLENGTH << " x " << MATRIXLENGTH << endl;
-    outFile << "Dot Product:                        " << dotProduct << endl;
-    outFile << "Time elapsed to fill matrices:      " << durationFill.count() << endl;
-    outFile << "Time elapsed to calculate product:  " << durationCalc.count() << endl;
+    outFile << "Matrix size:                        " << 
+    MATRIXLENGTH << " x " << MATRIXLENGTH << endl;
+    outFile << "Dot Product:                        " << 
+    dotProduct << endl;
+    outFile << "Time elapsed to fill matrices:      " << 
+    durationFill.count() << endl;
+    outFile << "Time elapsed to calculate product:  " << 
+    durationCalc.count() << endl;
 }
