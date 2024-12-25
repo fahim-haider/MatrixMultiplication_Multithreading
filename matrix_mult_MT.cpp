@@ -17,8 +17,7 @@ int matrix1[MATRIXLENGTH][MATRIXLENGTH];
 int matrix2[MATRIXLENGTH][MATRIXLENGTH];
 int result[MATRIXLENGTH][MATRIXLENGTH];
 
-long dotProduct = 0;
-const int THREADCOUNT = 4;
+const int THREADCOUNT = 3;
 
 // Semaphore variable!
 HANDLE productLock;
@@ -35,7 +34,7 @@ int randomNumberGenerator(int lower_bound, int upper_bound) {
 
 void fillMatrices(int threadID) {
     // Fill up the matrices!
-    for (int i = threadID; i < MATRIXLENGTH; i += THREADCOUNT) {
+    for (int i = 0; i < MATRIXLENGTH; i++) {
         for (int j = threadID; j < MATRIXLENGTH; j += THREADCOUNT) {
             matrix1[i][j] = randomNumberGenerator(0, 99);
             matrix2[i][j] = randomNumberGenerator(0, 99);
@@ -43,34 +42,20 @@ void fillMatrices(int threadID) {
     }
 }
 
-// Calculate dot product of the two matrices: matrix1 and matrix2
-int calculateDotProduct(int threadID) {
-    // Loop through rows
-    for(int i = 0; i < MATRIXLENGTH; i += THREADCOUNT) {
-        // Loop through elements of row and multipy with its corresponding column
-        for(int j = 0; j < MATRIXLENGTH; j += THREADCOUNT) {
-            WaitForSingleObject(productLock, INFINITE);
-            dotProduct += matrix1[i][j] * matrix2[j][i];
-            ReleaseSemaphore(productLock, 1, nullptr);
-        }
-    }
-    return 0;
-}
-
 // Calculate multiplicative product of the two matrices: matrix1 and matrix2
 int calculateProduct(int threadID) {
     // Loop through rows
-    for(int i = 0; i < MATRIXLENGTH; i += THREADCOUNT) {
+    for(int i = threadID; i < MATRIXLENGTH; i += THREADCOUNT) {
         // Loop through columns
-        for(int j = 0; j < MATRIXLENGTH; j += THREADCOUNT) {
+        for(int j = 0; j < MATRIXLENGTH; j++) {
             long temp = 0;
             // Loop through elements of current row and column combination
-            for(int index = 0; index < MATRIXLENGTH; i++) {
-                temp += matrix1[i][j] * matrix2[j][i];
+            for(int index = 0; index < MATRIXLENGTH; index++) {
+                temp += matrix1[i][index] * matrix2[index][j];
             }
-            WaitForSingleObject(productLock, INFINITE);
+            //WaitForSingleObject(productLock, INFINITE);
             result[i][j] += temp;
-            ReleaseSemaphore(productLock, 1, nullptr);
+            //ReleaseSemaphore(productLock, 1, nullptr);
         }
     }
     return 0;
@@ -103,7 +88,7 @@ int main (int argc, char* argv[]) {
 
     auto startCalc = chrono::high_resolution_clock::now();
     for(int i = 0; i < THREADCOUNT; i ++) {
-        threads[i] = thread(calculateDotProduct, i);
+        threads[i] = thread(calculateProduct, i);
     }
 
     for(auto& th: threads) {
@@ -115,8 +100,8 @@ int main (int argc, char* argv[]) {
 
     outFile << "Matrix size:                        " << 
     MATRIXLENGTH << " x " << MATRIXLENGTH << endl;
-    outFile << "Dot Product:                        " << 
-    dotProduct << endl;
+    outFile << "Result[0][0]:                       " << 
+    result[0][0] << endl;
     outFile << "Time elapsed to fill matrices:      " << 
     durationFill.count() << endl;
     outFile << "Time elapsed to calculate product:  " << 
