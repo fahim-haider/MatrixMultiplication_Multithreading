@@ -15,3 +15,6 @@ Matrix size:                        1000 x 1000
 Dot Product:                        617440260
 Time elapsed to fill matrices:      1.54707
 Time elapsed to calculate product:  1.60764
+
+DELETE EVERYTHING ABOVE
+-------------------------------------------------------------------------

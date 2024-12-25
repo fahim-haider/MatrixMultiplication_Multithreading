@@ -15,6 +15,7 @@ const int MATRIXLENGTH = 1000;
 // Thus, the dimensions of the matrix is MATRIXLENGTH x MATRIXLENGTH
 int matrix1[MATRIXLENGTH][MATRIXLENGTH];
 int matrix2[MATRIXLENGTH][MATRIXLENGTH];
+int result[MATRIXLENGTH][MATRIXLENGTH];
 
 long dotProduct = 0;
 const int THREADCOUNT = 4;
@@ -42,8 +43,8 @@ void fillMatrices(int threadID) {
     }
 }
 
-// Calculate dot product of the two matrices matrix1 and matrix2
-int calculateProduct(int threadID) {
+// Calculate dot product of the two matrices: matrix1 and matrix2
+int calculateDotProduct(int threadID) {
     // Loop through rows
     for(int i = 0; i < MATRIXLENGTH; i += THREADCOUNT) {
         // Loop through elements of row and multipy with its corresponding column
@@ -52,6 +53,24 @@ int calculateProduct(int threadID) {
             dotProduct += matrix1[i][j] * matrix2[j][i];
             ReleaseSemaphore(productLock, 1, nullptr);
         }
+    }
+    return 0;
+}
+
+// Calculate multiplicative product of the two matrices: matrix1 and matrix2
+int calculateProduct(int threadID) {
+    int column = 0;
+    // Loop through rows
+    for(int i = 0; i < MATRIXLENGTH; i += THREADCOUNT) {
+        long temp = 0;
+        // Loop through elements of row and multipy with its corresponding column
+        for(int j = 0; j < MATRIXLENGTH; j += THREADCOUNT) {
+            temp += matrix1[i][j] * matrix2[j][i];
+        }
+        WaitForSingleObject(productLock, INFINITE);
+        result[i][column] += temp;
+        ReleaseSemaphore(productLock, 1, nullptr);
+        column++;
     }
     return 0;
 }
@@ -83,7 +102,7 @@ int main (int argc, char* argv[]) {
 
     auto startCalc = chrono::high_resolution_clock::now();
     for(int i = 0; i < THREADCOUNT; i ++) {
-        threads[i] = thread(calculateProduct, i);
+        threads[i] = thread(calculateDotProduct, i);
     }
 
     for(auto& th: threads) {
