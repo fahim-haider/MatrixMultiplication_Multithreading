@@ -35,7 +35,7 @@ int randomNumberGenerator(int lower_bound, int upper_bound) {
 
 void fillMatrices(int threadID) {
     // Fill up the matrices!
-    for (int i = threadID; i < MATRIXLENGTH; i += THREADCOUNT) {
+    for (int i = 0; i < MATRIXLENGTH; i += THREADCOUNT) {
         for (int j = threadID; j < MATRIXLENGTH; j += THREADCOUNT) {
             matrix1[i][j] = randomNumberGenerator(0, 99);
             matrix2[i][j] = randomNumberGenerator(0, 99);
@@ -60,13 +60,13 @@ int calculateDotProduct(int threadID) {
 // Calculate multiplicative product of the two matrices: matrix1 and matrix2
 int calculateProduct(int threadID) {
     // Loop through rows
-    for(int i = 0; i < MATRIXLENGTH; i += THREADCOUNT) {
+    for(int i = threadID; i < MATRIXLENGTH; i += THREADCOUNT) {
         // Loop through columns
         for(int j = 0; j < MATRIXLENGTH; j += THREADCOUNT) {
             long temp = 0;
             // Loop through elements of current row and column combination
-            for(int index = 0; index < MATRIXLENGTH; i++) {
-                temp += matrix1[i][j] * matrix2[j][i];
+            for(int index = 0; index < MATRIXLENGTH; index++) {
+                temp += matrix1[i][index] * matrix2[index][i];
             }
             WaitForSingleObject(productLock, INFINITE);
             result[i][j] += temp;
@@ -103,7 +103,7 @@ int main (int argc, char* argv[]) {
 
     auto startCalc = chrono::high_resolution_clock::now();
     for(int i = 0; i < THREADCOUNT; i ++) {
-        threads[i] = thread(calculateDotProduct, i);
+        threads[i] = thread(calculateProduct, i);
     }
 
     for(auto& th: threads) {
@@ -115,8 +115,8 @@ int main (int argc, char* argv[]) {
 
     outFile << "Matrix size:                        " << 
     MATRIXLENGTH << " x " << MATRIXLENGTH << endl;
-    outFile << "Dot Product:                        " << 
-    dotProduct << endl;
+    outFile << "Result[0][0]:                       " << 
+    result[0][0] << endl;
     outFile << "Time elapsed to fill matrices:      " << 
     durationFill.count() << endl;
     outFile << "Time elapsed to calculate product:  " << 
