@@ -1,0 +1,7 @@
+Using multi-threading for matrix filling in:
+Matrix size:                        1000 x 1000
+Dot Product:                        613595280
+Time elapsed to fill matrices:      1.52312
+Time elapsed to calculate product:  0.003542
+-------------------------------------------------------------------------
+Using multi-threading to calculate dot product:
