@@ -6,13 +6,13 @@
 #include <filesystem>
 #include <chrono>
 #include <windows.h>
-#include "SimpleMode.hpp"
-#include "main.hpp"
+#include "../include/SimpleMode.hpp"
+#include "../include/main.hpp"
 
 using namespace std;
 
 // Calculate multiplicative product of the two matrices: matrix1 and matrix2
-int calculateProduct() {
+int calculateProductSimple() {
     // Loop through rows
     for(int i = 0; i < MATRIXLENGTH; i++) {
         // Loop through columns
@@ -38,12 +38,12 @@ void SimpleMode() {
     chrono::duration<double> durationFill = endFill - startFill;
 
     auto startCalc = chrono::high_resolution_clock::now();
-    calculateProduct();
+    calculateProductSimple();
     auto endCalc = chrono::high_resolution_clock::now();
 
     chrono::duration<double> durationCalc = endCalc - startCalc;
 
-    outFile << "##Simple Mode" << endl;
+    outFile << "## Simple Mode" << endl;
     outFile << "Matrix size:                        " << 
     MATRIXLENGTH << " x " << MATRIXLENGTH << endl;
     outFile << "Result[0][0]:                       " << 

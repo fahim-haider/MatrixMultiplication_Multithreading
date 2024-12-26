@@ -6,9 +6,9 @@
 #include <filesystem>
 #include <chrono>
 #include <windows.h>
-#include "main.hpp"
-#include "MTMode.hpp"
-#include "SimpleMode.hpp"
+#include "../include/main.hpp"
+#include "../include/MTMode.hpp"
+#include "../include/SimpleMode.hpp"
 
 using namespace std;
 
@@ -39,14 +39,14 @@ void fillMatrices(int threadID) {
     for (int i = 0; i < MATRIXLENGTH; i++) {
         if(threadID < 0) {
             for (int j = 0; j < MATRIXLENGTH; j++) {
-                matrix1[i][j] = randomNumberGenerator(0, 999);
-                matrix2[i][j] = randomNumberGenerator(0, 999);
+                matrix1[i][j] = randomNumberGenerator(0, 99);
+                matrix2[i][j] = randomNumberGenerator(0, 99);
             }
         }
         else {
             for (int j = threadID; j < MATRIXLENGTH; j += THREADCOUNT) {
-                matrix1[i][j] = randomNumberGenerator(0, 999);
-                matrix2[i][j] = randomNumberGenerator(0, 999);
+                matrix1[i][j] = randomNumberGenerator(0, 99);
+                matrix2[i][j] = randomNumberGenerator(0, 99);
             }
         }
     }
@@ -54,7 +54,7 @@ void fillMatrices(int threadID) {
 
 int main (int argc, char* argv[]) {
     //Creates output file
-    outFile.open("Results.txt");
+    outFile.open("Results.md");
 
     productLock = CreateSemaphore(nullptr, 1, 1, nullptr);
 

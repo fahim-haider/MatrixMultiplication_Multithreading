@@ -6,15 +6,15 @@
 #include <filesystem>
 #include <chrono>
 #include <windows.h>
-#include "MTMode.hpp"
-#include "main.hpp"
+#include "../include/SimpleTilling.hpp"
+#include "../include/main.hpp"
 
 using namespace std;
 
 // Calculate multiplicative product of the two matrices: matrix1 and matrix2
-int calculateProduct(int threadID) {
+int calculateProductSMPLTilling() {
     // Loop through rows
-    for(int i = threadID; i < MATRIXLENGTH; i += THREADCOUNT) {
+    for(int i = 0; i < MATRIXLENGTH; i++) {
         // Loop through columns
         for(int j = 0; j < MATRIXLENGTH; j++) {
             long temp = 0;
@@ -30,35 +30,20 @@ int calculateProduct(int threadID) {
     return 0;
 }
 
-// Acts as main for the multithreading mode!
-void MTMode() {
-    thread threads[THREADCOUNT];
-
+void SimpleTilling() {
     auto startFill = chrono::high_resolution_clock::now();
-    for(int i = 0; i < THREADCOUNT; i ++) {
-        threads[i] = thread(fillMatrices, i);
-    }
-
-    for(auto& th: threads) {
-        th.join();
-    }
+    fillMatrices(-1);
     auto endFill = chrono::high_resolution_clock::now();
 
     chrono::duration<double> durationFill = endFill - startFill;
 
     auto startCalc = chrono::high_resolution_clock::now();
-    for(int i = 0; i < THREADCOUNT; i ++) {
-        threads[i] = thread(calculateProduct, i);
-    }
-
-    for(auto& th: threads) {
-        th.join();
-    }
+    calculateProductSMPLTilling();
     auto endCalc = chrono::high_resolution_clock::now();
 
     chrono::duration<double> durationCalc = endCalc - startCalc;
 
-    outFile << "##Multithreading Mode" << endl;
+    outFile << "## Simple Mode using Tilling" << endl;
     outFile << "Matrix size:                        " << 
     MATRIXLENGTH << " x " << MATRIXLENGTH << endl;
     outFile << "Result[0][0]:                       " << 
@@ -66,5 +51,5 @@ void MTMode() {
     outFile << "Time elapsed to fill matrices:      " << 
     durationFill.count() << endl;
     outFile << "Time elapsed to calculate product:  " << 
-    durationCalc.count() << "\n" << endl;
+    durationCalc.count() << endl;
 }
