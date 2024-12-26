@@ -58,7 +58,7 @@ void MTMode() {
 
     chrono::duration<double> durationCalc = endCalc - startCalc;
 
-    outFile << "Multithreading Mode: " << endl;
+    outFile << "##Multithreading Mode" << endl;
     outFile << "Matrix size:                        " << 
     MATRIXLENGTH << " x " << MATRIXLENGTH << endl;
     outFile << "Result[0][0]:                       " << 
@@ -66,5 +66,5 @@ void MTMode() {
     outFile << "Time elapsed to fill matrices:      " << 
     durationFill.count() << endl;
     outFile << "Time elapsed to calculate product:  " << 
-    durationCalc.count() << endl;
+    durationCalc.count() << "\n" << endl;
 }

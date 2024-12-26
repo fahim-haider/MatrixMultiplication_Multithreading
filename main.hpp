@@ -24,5 +24,4 @@ extern ofstream outFile;
 int randomNumberGenerator(int lower_bound, int upper_bound);
 void fillMatrices(int threadID);
 
-
 #endif

@@ -8,6 +8,7 @@
 #include <windows.h>
 #include "main.hpp"
 #include "MTMode.hpp"
+#include "SimpleMode.hpp"
 
 using namespace std;
 
@@ -20,6 +21,7 @@ int result[MATRIXLENGTH][MATRIXLENGTH];
 // Semaphore variable!
 HANDLE productLock;
 
+// Global output file that all src files can use to write results to
 ofstream outFile;
 
 // Create a random number generator with an upper and lower bound! (inclusive)
@@ -35,9 +37,17 @@ int randomNumberGenerator(int lower_bound, int upper_bound) {
 void fillMatrices(int threadID) {
     // Fill up the matrices!
     for (int i = 0; i < MATRIXLENGTH; i++) {
-        for (int j = threadID; j < MATRIXLENGTH; j += THREADCOUNT) {
-            matrix1[i][j] = randomNumberGenerator(0, 999);
-            matrix2[i][j] = randomNumberGenerator(0, 999);
+        if(threadID < 0) {
+            for (int j = 0; j < MATRIXLENGTH; j++) {
+                matrix1[i][j] = randomNumberGenerator(0, 999);
+                matrix2[i][j] = randomNumberGenerator(0, 999);
+            }
+        }
+        else {
+            for (int j = threadID; j < MATRIXLENGTH; j += THREADCOUNT) {
+                matrix1[i][j] = randomNumberGenerator(0, 999);
+                matrix2[i][j] = randomNumberGenerator(0, 999);
+            }
         }
     }
 }
@@ -53,6 +63,7 @@ int main (int argc, char* argv[]) {
         return 1;
     }
 
+    SimpleMode();
     MTMode();
 
     outFile.close();
