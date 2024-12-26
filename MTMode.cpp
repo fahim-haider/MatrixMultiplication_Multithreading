@@ -6,41 +6,10 @@
 #include <filesystem>
 #include <chrono>
 #include <windows.h>
+#include "MTMode.hpp"
+#include "main.hpp"
 
 using namespace std;
-
-// Stores the one dimensional size of the matrix
-const int MATRIXLENGTH = 1000;
-// Creates matrices of MATRIXLENGTH in length and width!
-// Thus, the dimensions of the matrix is MATRIXLENGTH x MATRIXLENGTH
-int matrix1[MATRIXLENGTH][MATRIXLENGTH];
-int matrix2[MATRIXLENGTH][MATRIXLENGTH];
-int result[MATRIXLENGTH][MATRIXLENGTH];
-
-const int THREADCOUNT = 3;
-
-// Semaphore variable!
-HANDLE productLock;
-
-// Create a random number generator with an upper and lower bound! (inclusive)
-int randomNumberGenerator(int lower_bound, int upper_bound) {
-    random_device rd;
-    mt19937 gen(rd());
-
-    uniform_int_distribution<> distr(lower_bound, upper_bound);
-
-    return distr(gen);
-}
-
-void fillMatrices(int threadID) {
-    // Fill up the matrices!
-    for (int i = 0; i < MATRIXLENGTH; i++) {
-        for (int j = threadID; j < MATRIXLENGTH; j += THREADCOUNT) {
-            matrix1[i][j] = randomNumberGenerator(0, 99);
-            matrix2[i][j] = randomNumberGenerator(0, 99);
-        }
-    }
-}
 
 // Calculate multiplicative product of the two matrices: matrix1 and matrix2
 int calculateProduct(int threadID) {
@@ -61,17 +30,8 @@ int calculateProduct(int threadID) {
     return 0;
 }
 
-int main (int argc, char* argv[]) {
-    //Creates output file
-    ofstream outFile("Results.txt");
-
-    productLock = CreateSemaphore(nullptr, 1, 1, nullptr);
-
-    if(productLock == nullptr) {
-        cerr << "CreateSemaphore error!" << GetLastError() << endl;
-        return 1;
-    }
-
+// Acts as main for the multithreading mode!
+void MTMode() {
     thread threads[THREADCOUNT];
 
     auto startFill = chrono::high_resolution_clock::now();
@@ -98,6 +58,7 @@ int main (int argc, char* argv[]) {
 
     chrono::duration<double> durationCalc = endCalc - startCalc;
 
+    outFile << "Multithreading Mode: " << endl;
     outFile << "Matrix size:                        " << 
     MATRIXLENGTH << " x " << MATRIXLENGTH << endl;
     outFile << "Result[0][0]:                       " << 

@@ -1,4 +1,5 @@
+Multithreading Mode: 
 Matrix size:                        1000 x 1000
-Result[0][0]:                       2445556
-Time elapsed to fill matrices:      22.9717
-Time elapsed to calculate product:  2.69519
+Result[0][0]:                       242062549
+Time elapsed to fill matrices:      6.15612
+Time elapsed to calculate product:  0.75125
