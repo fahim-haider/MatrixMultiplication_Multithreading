@@ -6,9 +6,11 @@
 using namespace std;
 
 // Stores the one dimensional size of the matrix
-const int MATRIXLENGTH = 1000;
+const int MATRIXLENGTH = 1024;
 // Stores the amount of threads to be used (if MT)
-const int THREADCOUNT = 4;
+const int THREADCOUNT = 8;
+// Tile size
+const int TILESIZE = 32;
 
 // Semaphore variable!
 extern HANDLE productLock;

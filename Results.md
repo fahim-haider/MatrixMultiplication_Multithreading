@@ -1,12 +1,20 @@
+Number of threads: 8
+
 ## Simple Mode
-Matrix size:                        1000 x 1000
-Result[0][0]:                       2312883
-Time elapsed to fill matrices:      22.1419
-Time elapsed to calculate product:  2.54393
+Matrix size:                        1024 x 1024
+
+Result[0][0]:                       2586696
+
+Time elapsed to fill matrices:      23.1028
+
+Time elapsed to calculate product:  15.6149
 
 ## Multithreading Mode
-Matrix size:                        1000 x 1000
-Result[0][0]:                       4663864
-Time elapsed to fill matrices:      5.58914
-Time elapsed to calculate product:  0.660256
+Matrix size:                        1024 x 1024
+
+Result[0][0]:                       2543817
+
+Time elapsed to fill matrices:      3.26746
+
+Time elapsed to calculate product:  3.00069
 

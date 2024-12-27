@@ -18,6 +18,7 @@ int calculateProductMT(int threadID) {
         // Loop through columns
         for(int j = 0; j < MATRIXLENGTH; j++) {
             long temp = 0;
+            result[i][j] = 0;
             // Loop through elements of current row and column combination
             for(int index = 0; index < MATRIXLENGTH; index++) {
                 temp += matrix1[i][index] * matrix2[index][j];
@@ -35,7 +36,7 @@ void MTMode() {
     thread threads[THREADCOUNT];
 
     auto startFill = chrono::high_resolution_clock::now();
-    for(int i = 0; i < THREADCOUNT; i ++) {
+    for(int i = 0; i < THREADCOUNT; i++) {
         threads[i] = thread(fillMatrices, i);
     }
 
@@ -60,11 +61,11 @@ void MTMode() {
 
     outFile << "## Multithreading Mode" << endl;
     outFile << "Matrix size:                        " << 
-    MATRIXLENGTH << " x " << MATRIXLENGTH << endl;
+    MATRIXLENGTH << " x " << MATRIXLENGTH << "\n" << endl;
     outFile << "Result[0][0]:                       " << 
-    result[0][0] << endl;
+    result[0][0] << "\n" << endl;
     outFile << "Time elapsed to fill matrices:      " << 
-    durationFill.count() << endl;
+    durationFill.count() << "\n" << endl;
     outFile << "Time elapsed to calculate product:  " << 
     durationCalc.count() << "\n" << endl;
 }

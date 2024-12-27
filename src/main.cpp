@@ -9,6 +9,7 @@
 #include "../include/main.hpp"
 #include "../include/MTMode.hpp"
 #include "../include/SimpleMode.hpp"
+#include "../include/SimpleTiling.hpp"
 
 using namespace std;
 
@@ -52,6 +53,7 @@ void fillMatrices(int threadID) {
     }
 }
 
+// main function of the entire program?!?!
 int main (int argc, char* argv[]) {
     //Creates output file
     outFile.open("Results.md");
@@ -62,6 +64,8 @@ int main (int argc, char* argv[]) {
         cerr << "CreateSemaphore error!" << GetLastError() << endl;
         return 1;
     }
+
+    outFile << "Number of threads: " << THREADCOUNT << "\n" << endl;
 
     SimpleMode();
     MTMode();
