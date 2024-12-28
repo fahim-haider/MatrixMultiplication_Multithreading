@@ -11,6 +11,21 @@
 
 using namespace std;
 
+void setMatricesTiling() {
+    // Fill up the matrices!
+    for(int ii = 0; ii < MATRIXLENGTH; ii+=TILESIZE) {
+        for(int jj = 0; jj < MATRIXLENGTH; jj+= TILESIZE) {
+            for(int i = ii; i < ii + TILESIZE && i < MATRIXLENGTH; i++) {
+                for(int j = jj; j < jj + TILESIZE && j < MATRIXLENGTH; j++) {
+                    matrix1[i][j] = randomNumberGenerator(0, 99);
+                    matrix2[i][j] = randomNumberGenerator(0, 99);
+                    result[i][j] = 0;
+                }
+            }
+        }
+    }
+}
+
 // Calculate multiplicative product of the two matrices: matrix1 and matrix2
 int calculateProductSMPLTiling() {
     // Loop through rows

@@ -1,38 +1,38 @@
 Number of threads for multithreading calculations: 8
 
 ## Simple Mode
-Matrix size:                        1024 x 1024
+Matrix size:                        2048 x 2048
 
-Result[0][0]:                       2541159
+Result[0][0]:                       5059187
 
-Time elapsed to fill matrices:      23.6548
+Time elapsed to fill matrices:      94.6872
 
-Time elapsed to calculate product:  2.85375
+Time elapsed to calculate product:  113.873
 
 ## Multithreading Mode
-Matrix size:                        1024 x 1024
+Matrix size:                        2048 x 2048
 
-Result[0][0]:                       2495427
+Result[0][0]:                       4909430
 
-Time elapsed to fill matrices:      3.44384
+Time elapsed to fill matrices:      13.4958
 
-Time elapsed to calculate product:  0.888601
+Time elapsed to calculate product:  29.9915
 
 ## Simple Mode using Tilling
-Matrix size:                        1024 x 1024
+Matrix size:                        2048 x 2048
 
-Result[0][0]:                       2468651
+Result[0][0]:                       5090534
 
-Time elapsed to fill matrices:      23.616
+Time elapsed to fill matrices:      95.2905
 
-Time elapsed to calculate product:  3.187
+Time elapsed to calculate product:  26.7827
 
 ## Multithreaded Mode using Tilling
-Matrix size:                        1024 x 1024
+Matrix size:                        2048 x 2048
 
-Result[0][0]:                       2527050
+Result[0][0]:                       4897147
 
-Time elapsed to fill matrices:      3.39807
+Time elapsed to fill matrices:      13.9493
 
-Time elapsed to calculate product:  0.65978
+Time elapsed to calculate product:  5.64741
 

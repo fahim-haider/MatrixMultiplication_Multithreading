@@ -6,7 +6,7 @@
 using namespace std;
 
 // Stores the one dimensional size of the matrix
-const int MATRIXLENGTH = 1024;
+const int MATRIXLENGTH = 2048;
 // Stores the amount of threads to be used (if MT)
 const int THREADCOUNT = 8;
 // Tile size

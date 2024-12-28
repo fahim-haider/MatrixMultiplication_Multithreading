@@ -11,6 +11,21 @@
 
 using namespace std;
 
+void setMatricesMTTiling(int threadID) {
+    // Fill up the matrices!
+    for(int ii = threadID*TILESIZE; ii < MATRIXLENGTH; ii+=TILESIZE*THREADCOUNT) {
+        for(int jj = 0; jj < MATRIXLENGTH; jj+= TILESIZE) {
+            for(int i = ii; i < ii + TILESIZE && i < MATRIXLENGTH; i++) {
+                for(int j = jj; j < jj + TILESIZE && j < MATRIXLENGTH; j++) {
+                    matrix1[i][j] = randomNumberGenerator(0, 99);
+                    matrix2[i][j] = randomNumberGenerator(0, 99);
+                    result[i][j] = 0;
+                }
+            }
+        }
+    }
+}
+
 // Calculate multiplicative product of the two matrices: matrix1 and matrix2
 int calculateProductMTTiling(int threadID) {
     // Loop through rows
@@ -37,7 +52,7 @@ void MTTiling() {
 
     auto startFill = chrono::high_resolution_clock::now();
     for(int i = 0; i < THREADCOUNT; i++) {
-        threads[i] = thread(setMatrices, i);
+        threads[i] = thread(setMatricesMTTiling, i);
     }
 
     for(auto& th: threads) {

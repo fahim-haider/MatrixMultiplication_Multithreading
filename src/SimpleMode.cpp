@@ -18,13 +18,12 @@ int calculateProductSimple() {
         // Loop through columns
         for(int j = 0; j < MATRIXLENGTH; j++) {
             long temp = 0;
-            result[i][j] = 0;
             // Loop through elements of current row and column combination
             for(int index = 0; index < MATRIXLENGTH; index++) {
                 temp += matrix1[i][index] * matrix2[index][j];
             }
             //WaitForSingleObject(productLock, INFINITE);
-            result[i][j] += temp;
+            result[i][j] = temp;
             //ReleaseSemaphore(productLock, 1, nullptr);
         }
     }
