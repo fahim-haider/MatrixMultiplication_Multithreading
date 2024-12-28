@@ -1,7 +1,7 @@
 #ifndef SIMPLEMODE_HPP
 #define SIMPLEMODE_HPP
 
-int calculateProduct();
+int calculateProductSimple();
 void SimpleMode();
 
 #endif
