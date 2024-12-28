@@ -37,7 +37,7 @@ void MTMode() {
 
     auto startFill = chrono::high_resolution_clock::now();
     for(int i = 0; i < THREADCOUNT; i++) {
-        threads[i] = thread(fillMatrices, i);
+        threads[i] = thread(setMatrices, i);
     }
 
     for(auto& th: threads) {

@@ -7,8 +7,10 @@ functions on top of the simple program. The stages of development is as follows:
     3 - Tiling implementation: utilize tiling to increase cache hit ratio to speed up task
     4 - Thread pools: utilize thread pools to hand each thread a task to reduce 
     overhead from thread creation (TBC)
+    5 - C++ AMP library implemention: become familiar with industry standard tools to 
+    parallelize compelx computations
 
-## Lessons Learnt
+## Concepts Learnt
 -Multithreading: using multiple threads to perform matrix multiplication in C++
 
 -Windows semaphores: although not necessary for this application, 
@@ -19,6 +21,9 @@ before being removed
 
 -Program Modularity: dividing the source and include files to efficiently 
 program the project while minimizing code duplication
+
+-GDB interface with VisualStudioCode; learned alot about the VSCode interface to efficiently 
+handle project files utilizing .gitignore, tasks.json and launch.json files
 
 -Extern keyword: efficiently declaring and defining shared variables and matrices
 to minimize the number of duplicate declarations produced between src files

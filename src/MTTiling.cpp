@@ -6,15 +6,15 @@
 #include <filesystem>
 #include <chrono>
 #include <windows.h>
-#include "../include/SimpleTiling.hpp"
+#include "../include/MTTiling.hpp"
 #include "../include/main.hpp"
 
 using namespace std;
 
 // Calculate multiplicative product of the two matrices: matrix1 and matrix2
-int calculateProductSMPLTiling() {
+int calculateProductMTTiling(int threadID) {
     // Loop through rows
-    for(int ii = 0; ii < MATRIXLENGTH; ii+=TILESIZE) {
+    for(int ii = threadID*TILESIZE; ii < MATRIXLENGTH; ii+=TILESIZE*THREADCOUNT) {
         // Loop through columns
         for(int jj = 0; jj < MATRIXLENGTH; jj+= TILESIZE) {
             for(int kk = 0; kk < MATRIXLENGTH; kk+= TILESIZE)
@@ -32,20 +32,34 @@ int calculateProductSMPLTiling() {
     return 0;
 }
 
-void SimpleTiling() {
+void MTTiling() {
+    thread threads[THREADCOUNT];
+
     auto startFill = chrono::high_resolution_clock::now();
-    setMatrices(-1);
+    for(int i = 0; i < THREADCOUNT; i++) {
+        threads[i] = thread(setMatrices, i);
+    }
+
+    for(auto& th: threads) {
+        th.join();
+    }
     auto endFill = chrono::high_resolution_clock::now();
 
     chrono::duration<double> durationFill = endFill - startFill;
 
     auto startCalc = chrono::high_resolution_clock::now();
-    calculateProductSMPLTiling();
+    for(int i = 0; i <= THREADCOUNT; i++) {
+        threads[i] = thread(calculateProductMTTiling, i);
+    }
+
+    for(auto& th: threads) {
+        th.join();
+    }
     auto endCalc = chrono::high_resolution_clock::now();
 
     chrono::duration<double> durationCalc = endCalc - startCalc;
 
-    outFile << "## Simple Mode using Tilling" << endl;
+    outFile << "## Multithreaded Mode using Tilling" << endl;
     outFile << "Matrix size:                        " << 
     MATRIXLENGTH << " x " << MATRIXLENGTH << "\n" << endl;
     outFile << "Result[0][0]:                       " << 

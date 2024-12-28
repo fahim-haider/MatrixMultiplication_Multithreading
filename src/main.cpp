@@ -10,6 +10,7 @@
 #include "../include/MTMode.hpp"
 #include "../include/SimpleMode.hpp"
 #include "../include/SimpleTiling.hpp"
+#include "../include/MTTiling.hpp"
 
 using namespace std;
 
@@ -35,19 +36,21 @@ int randomNumberGenerator(int lower_bound, int upper_bound) {
     return distr(gen);
 }
 
-void fillMatrices(int threadID) {
+void setMatrices(int threadID) {
     // Fill up the matrices!
     for (int i = 0; i < MATRIXLENGTH; i++) {
         if(threadID < 0) {
             for (int j = 0; j < MATRIXLENGTH; j++) {
                 matrix1[i][j] = randomNumberGenerator(0, 99);
                 matrix2[i][j] = randomNumberGenerator(0, 99);
+                result[i][j] = 0;
             }
         }
         else {
             for (int j = threadID; j < MATRIXLENGTH; j += THREADCOUNT) {
                 matrix1[i][j] = randomNumberGenerator(0, 99);
                 matrix2[i][j] = randomNumberGenerator(0, 99);
+                result[i][j] = 0;
             }
         }
     }
@@ -65,10 +68,12 @@ int main (int argc, char* argv[]) {
         return 1;
     }
 
-    outFile << "Number of threads: " << THREADCOUNT << "\n" << endl;
+    outFile << "Number of threads for multithreading calculations: " << THREADCOUNT << "\n" << endl;
 
     SimpleMode();
     MTMode();
+    SimpleTiling();
+    MTTiling();
 
     outFile.close();
 }

@@ -24,6 +24,6 @@ extern int result[MATRIXLENGTH][MATRIXLENGTH];
 extern ofstream outFile;
 
 int randomNumberGenerator(int lower_bound, int upper_bound);
-void fillMatrices(int threadID);
+void setMatrices(int threadID);
 
 #endif

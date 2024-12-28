@@ -34,7 +34,7 @@ int calculateProductSimple() {
 // Acts as main for the simple mode!
 void SimpleMode() {
     auto startFill = chrono::high_resolution_clock::now();
-    fillMatrices(-1);
+    setMatrices(-1);
     auto endFill = chrono::high_resolution_clock::now();
 
     chrono::duration<double> durationFill = endFill - startFill;
